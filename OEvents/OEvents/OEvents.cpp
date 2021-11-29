@@ -5,3 +5,4 @@ OEvents::OEvents(QWidget *parent)
 {
     ui.setupUi(this);
 }
+

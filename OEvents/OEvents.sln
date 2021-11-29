@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31829.152
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OEvents", "OEvents\OEvents.vcxproj", "{BA02E007-DAF1-4B01-BB0B-56E6B6FFFE6B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OEvents", "OEvents\OEvents.vcxproj", "{ABD846EE-DA1F-439B-B755-5FBAF7C2272E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA02E007-DAF1-4B01-BB0B-56E6B6FFFE6B}.Debug|x64.ActiveCfg = Debug|x64
-		{BA02E007-DAF1-4B01-BB0B-56E6B6FFFE6B}.Debug|x64.Build.0 = Debug|x64
-		{BA02E007-DAF1-4B01-BB0B-56E6B6FFFE6B}.Release|x64.ActiveCfg = Release|x64
-		{BA02E007-DAF1-4B01-BB0B-56E6B6FFFE6B}.Release|x64.Build.0 = Release|x64
+		{ABD846EE-DA1F-439B-B755-5FBAF7C2272E}.Debug|x64.ActiveCfg = Debug|x64
+		{ABD846EE-DA1F-439B-B755-5FBAF7C2272E}.Debug|x64.Build.0 = Debug|x64
+		{ABD846EE-DA1F-439B-B755-5FBAF7C2272E}.Release|x64.ActiveCfg = Release|x64
+		{ABD846EE-DA1F-439B-B755-5FBAF7C2272E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F9D5BBED-8AA4-4FBB-A685-0811216F5F29}
+		SolutionGuid = {BE7C894B-DD6E-4D2E-9554-E7BB37BD855C}
 	EndGlobalSection
 EndGlobal

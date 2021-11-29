@@ -9,6 +9,7 @@ class OEvents : public QMainWindow
 
 public:
     OEvents(QWidget *parent = Q_NULLPTR);
+    ~OEvents();
 
 private:
     Ui::OEventsClass ui;
