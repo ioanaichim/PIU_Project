@@ -61,8 +61,8 @@ private:
     void createPanel();
     //bara cu instrumente ce se pot aplica pe elementul selectat
     void createToolbars();
-    QWidget* createBackgroundCellWidget(const QString& text,const QString& image);
-    QWidget* createCellWidget(const QString& text);
+   
+    QWidget* createCellWidget(const QString& text, const QString& image);
     //meniu din care se pot alege culori
     QMenu* createColorMenu(const char* slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString& image, QColor color);
@@ -70,6 +70,8 @@ private:
 
     PlanScene* scene;
     QGraphicsView* view;
+
+    QString projectName;
 
     QAction* exitAction;
     QAction* addAction;

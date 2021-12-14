@@ -213,19 +213,10 @@ void OEvents::about()
 void OEvents::createPanel()
 {
     QGridLayout* layout = new QGridLayout;
-    layout->addWidget(createCellWidget(tr("Table")), 0, 0);
-    layout->addWidget(createCellWidget(tr("Chair")), 0, 1);
-
-    QToolButton* textButton = new QToolButton;
-    textButton->setCheckable(true);
-    textButton->setIcon(QIcon(QPixmap(":/images/textpointer.png")));
-    textButton->setIconSize(QSize(50, 50));
-    QGridLayout* textLayout = new QGridLayout;
-    textLayout->addWidget(textButton, 0, 0, Qt::AlignHCenter);
-    textLayout->addWidget(new QLabel(tr("Text")), 1, 0, Qt::AlignCenter);
-    QWidget* textWidget = new QWidget;
-    textWidget->setLayout(textLayout);
-    layout->addWidget(textWidget, 1, 1);
+    layout->addWidget(createCellWidget(tr("Table"),":/images/table.png"), 0, 0);
+    layout->addWidget(createCellWidget(tr("Chair"),":/images/chair.png"), 0, 1);
+    layout->addWidget(createCellWidget(tr("Scene"),":/images/scene.png"), 1, 0);
+    layout->addWidget(createCellWidget(tr("Pupitru"), ":/images/pupitru.png"), 1, 1);
 
     layout->setRowStretch(3, 10);
     layout->setColumnStretch(2, 10);
@@ -233,10 +224,13 @@ void OEvents::createPanel()
     QWidget* itemWidget = new QWidget;
     itemWidget->setLayout(layout);
 
+    QWidget* proprietiesWidget = new QWidget;
+
     toolBox = new QToolBox;
     toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
     toolBox->setMinimumWidth(itemWidget->sizeHint().width());
-    toolBox->addItem(itemWidget, tr("Basic Elements Shapes"));
+    toolBox->addItem(itemWidget, tr("Basic Elements "));
+    toolBox->addItem(proprietiesWidget, tr("Element Proprieties "));
 }
 
 void OEvents::createActions()
@@ -249,6 +243,7 @@ void OEvents::createActions()
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, &QAction::triggered, this, &OEvents::newProject);
     fileMenu->addAction(newAct);
+    //
     fileToolBar->addAction(newAct);
 
     const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/images/open.png"));
@@ -262,7 +257,7 @@ void OEvents::createActions()
     const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
     QAction* saveAct = new QAction(saveIcon, tr("&Save"), this);
     saveAct->setShortcuts(QKeySequence::Save);
-    saveAct->setStatusTip(tr("Save the document to disk"));
+    saveAct->setStatusTip(tr("Save the project to disk"));
     connect(saveAct, &QAction::triggered, this, &OEvents::save);
     fileMenu->addAction(saveAct);
     fileToolBar->addAction(saveAct);
@@ -271,7 +266,7 @@ void OEvents::createActions()
     fileMenu->addSeparator();
     deleteAction = new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this);
     deleteAction->setShortcut(tr("Delete"));
-    deleteAction->setStatusTip(tr("Delete item from diagram"));
+    deleteAction->setStatusTip(tr("Delete item from scene"));
     connect(deleteAction, &QAction::triggered, this, &OEvents::deleteItem);
 
     exitAction = new QAction(tr("E&xit"), this);
@@ -286,6 +281,7 @@ void OEvents::createActions()
     exitAct->setStatusTip(tr("Exit the application"));
 
     QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
+    //adaugare si in bara cu instrumente de editare
     QToolBar* editToolBar = addToolBar(tr("Edit"));
 
 
@@ -347,32 +343,15 @@ void OEvents::createToolbars()
     pointerToolbar->addWidget(sceneScaleCombo);
 }
 
-QWidget* OEvents::createBackgroundCellWidget(const QString & text, const QString & image)
-{
-    QToolButton* button = new QToolButton;
-    button->setText(text);
-    button->setIcon(QIcon(image));
-    button->setIconSize(QSize(50, 50));
-    button->setCheckable(true);
-
-
-    QGridLayout* layout = new QGridLayout;
-    layout->addWidget(button, 0, 0, Qt::AlignHCenter);
-    layout->addWidget(new QLabel(text), 1, 0, Qt::AlignCenter);
-
-    QWidget* widget = new QWidget;
-    widget->setLayout(layout);
-
-    return widget;
-}
 
 //cell table cu elemente disponibile de pus in plan
-QWidget* OEvents::createCellWidget(const QString & text)
+QWidget* OEvents::createCellWidget(const QString & text,const QString & image)
 {
     Element item( itemMenu);
 
     QToolButton* button = new QToolButton;
     button->setIconSize(QSize(50, 50));
+    button->setIcon(QIcon(image));
     button->setCheckable(true);
 
     QGridLayout* layout = new QGridLayout;
