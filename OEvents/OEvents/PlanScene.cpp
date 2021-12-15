@@ -5,7 +5,7 @@ PlanScene::PlanScene(QMenu* itemMenu, QObject* parent)
     : QGraphicsScene(parent)
 {
     myItemMenu = itemMenu;
-    myMode = MoveItem;
+    myMode = Mode::MoveItem;
     
     myItemColor = Qt::white;
     myLineColor = Qt::black;
@@ -19,10 +19,28 @@ void PlanScene::setItemColor(const QColor& color)
         item->setBrush(myItemColor);
   
 }
+void PlanScene::setLineColor(const QColor& color)
+{
+    myLineColor = color;
+    Element* item = qgraphicsitem_cast<Element*>(selectedItems().first());
+    item->setBrush(myLineColor);
+    update();
+
+}
 
 bool PlanScene::hasChanges()
 {
     return false;
+}
+
+void PlanScene::setItemShape(Element::Shape shape)
+{
+    myItemShape = shape;
+}
+
+void PlanScene::setItemType(Element::ElementType type)
+{
+    myItemType = type;
 }
 
 void PlanScene::setMode(Mode mode)
@@ -39,7 +57,7 @@ void PlanScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
     Element* item;
     switch (myMode) {
     case InsertItem:
-        item = new Element(myItemMenu);
+        item = new Element(myItemShape,myItemColor,myItemMenu);
         item->setBrush(myItemColor);
         addItem(item);
         item->setPos(mouseEvent->scenePos());
@@ -62,6 +80,7 @@ void PlanScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
 void PlanScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
+
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 

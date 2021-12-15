@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 
+//fereastra in care se construieste planificarea
 class PlanScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -16,14 +17,19 @@ public:
     QColor lineColor() const { return myLineColor; }
     void setItemColor(const QColor& color);
 
+    void setLineColor(const QColor& color);
+
     bool hasChanges();
 
 public slots:
     void setMode(Mode mode);
+    void setItemShape(Element::Shape shape);
+    void setItemType(Element::ElementType type);
 
 signals:
     void itemInserted(Element* item);
     void itemSelected(QGraphicsItem* item);
+
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
@@ -34,7 +40,9 @@ private:
 
     QMenu* myItemMenu;
     Mode myMode;
-    bool leftButtonDown;
+    Element::Shape myItemShape;
+    Element::ElementType myItemType;
+    
     //punctul in care plasez item-ul
     QPointF startPoint;
     //item-ul poate fi colorat diferit si conturul lui de asemenea///cel mai probabil va fi pus in proprietatile elementului

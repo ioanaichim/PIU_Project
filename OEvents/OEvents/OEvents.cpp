@@ -3,79 +3,15 @@
 //ceea ce trebuia sa apara in fereastra principala
 OEvents::OEvents()
 {
-    //QWidget* widget = new QWidget;
-    //QGridLayout* layout = new QGridLayout(widget);
-
-    //setCentralWidget(widget);
-    //widget->setLayout(layout);
-
-    //QGroupBox* box = new QGroupBox("", widget);
-    //layout->addWidget(box, 0, 1, 1, 1);
-
-
-    //QGroupBox* drawbox = new QGroupBox("Suprafata de desen:", widget);
-    //drawbox->setMinimumSize(700, 700);
-    //layout->addWidget(drawbox, 0, 2, 1, 2);
-
-    //QVBoxLayout* boxLayout = new QVBoxLayout(box);
-    //QVBoxLayout* drawLayout = new QVBoxLayout(drawbox);
-
-    //QWidget* propertiesWidget = new QWidget(box);
-    //QWidget* checkBoxWidget = new QWidget(box);
-
-    //QWidget* drawWidget = new QWidget(drawbox);
-
-    //QListWidget* listWidget = new QListWidget(box);
-
-    //boxLayout->addWidget(new QLabel("Elemente de pus in scena:"));
-    //boxLayout->addWidget(listWidget);
-    //boxLayout->addWidget(propertiesWidget);
-    //boxLayout->addWidget(checkBoxWidget);
-
-    //drawLayout->addWidget(drawWidget);
-
-
-    //QVBoxLayout* elementsLayout = new QVBoxLayout(listWidget);
-
-    //QListWidgetItem* masa = new QListWidgetItem("Masa");
-    //listWidget->addItem(masa);
-    //QListWidgetItem* scaun = new QListWidgetItem("Scaun");
-    //listWidget->addItem(scaun);
-    //QListWidgetItem* scena = new QListWidgetItem("Scena");
-    //listWidget->addItem(scena);
-    //elementsLayout->addWidget(listWidget);
-
-    //QVBoxLayout* propertiesLayout = new QVBoxLayout(propertiesWidget);
-    //QTextEdit* text = new QTextEdit(propertiesWidget);
-    //propertiesLayout->addWidget(new QLabel("Proprietetile elementului selectat:"));
-    //propertiesLayout->addWidget(text);
-
-    //QListWidgetItem* current = listWidget->currentItem();
-    ////current->setText("A");
-    //text->setText("Merge sa scriu text aici \n si sa il suprascriu");
-    ////text->setText("aaa");
-
-    //QHBoxLayout* checkBoxLayout = new QHBoxLayout(checkBoxWidget);
-    //checkBoxLayout->addWidget(new QCheckBox(checkBoxWidget));
-    //checkBoxLayout->addWidget(new QLabel("Distantare sociala                    "));
-
-    //QVBoxLayout* drawingLayout = new QVBoxLayout(drawWidget);
-    //drawingLayout->addWidget(new QLabel("Suprafata desen:"));
-    //drawingLayout->addWidget(new QTextEdit(drawWidget));
-
-
-    //layout->addWidget(new QLineEdit("Status:"), 1, 1, 1, 3);
-
     createActions();
     createPanel();
     createStatusBar();
 
     scene = new PlanScene(itemMenu, this);
     scene->setSceneRect(QRectF(0, 0, 5000, 5000));
-    connect(scene, &PlanScene::itemInserted,
-        this, &OEvents::itemInserted);
-    connect(scene, &PlanScene::itemSelected,
-        this, &OEvents::itemSelected);
+    connect(scene, &PlanScene::itemInserted,this, &OEvents::itemInserted);
+    connect(scene, &PlanScene::itemSelected,this, &OEvents::itemSelected);
+    //connect(scene, &PlanScene::duplicateItem, this, &OEvents::duplicateItem);
     createToolbars();
 
     QHBoxLayout* layout = new QHBoxLayout;
@@ -95,6 +31,7 @@ void OEvents::newProject()
 {
     //TODO
 }
+
 void OEvents::loadProject(const QString& fileName)
 {
     QFile file(fileName);
@@ -169,12 +106,18 @@ void OEvents::deleteItem()
     }
 }
 
+void OEvents::duplicateItem(Element *item)
+{
+    //TODO
+}
+
 void OEvents::itemInserted(Element* item)
 {
     //pointerTypeGroup->button(int(PlanScene::MoveItem))->setChecked(true);
     //scene->setMode(PlanScene::Mode(pointerTypeGroup->checkedId()));
    
 }
+
 void OEvents::sceneScaleChanged(const QString& scale)
 {
     double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
@@ -183,6 +126,7 @@ void OEvents::sceneScaleChanged(const QString& scale)
     view->translate(oldMatrix.dx(), oldMatrix.dy());
     view->scale(newScale, newScale);
 }
+
 void OEvents::itemColorChanged()
 {
     fillAction = qobject_cast<QAction*>(sender());
@@ -196,6 +140,10 @@ void OEvents::fillButtonTriggered()
     scene->setItemColor(qvariant_cast<QColor>(fillAction->data()));
 }
 
+void OEvents::lineButtonTriggered()
+{
+    scene->setLineColor(qvariant_cast<QColor>(lineAction->data()));
+}
 
 void OEvents::itemSelected(QGraphicsItem* item)
 {
@@ -212,11 +160,14 @@ void OEvents::about()
 
 void OEvents::createPanel()
 {
+    buttonGroup = new QButtonGroup(this);
+    buttonGroup->setExclusive(false);
+    connect(buttonGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked),this, &OEvents::buttonGroupClicked);
     QGridLayout* layout = new QGridLayout;
-    layout->addWidget(createCellWidget(tr("Table"),":/images/table.png"), 0, 0);
-    layout->addWidget(createCellWidget(tr("Chair"),":/images/chair.png"), 0, 1);
-    layout->addWidget(createCellWidget(tr("Scene"),":/images/scene.png"), 1, 0);
-    layout->addWidget(createCellWidget(tr("Pupitru"), ":/images/pupitru.png"), 1, 1);
+    layout->addWidget(createCellWidget(tr("Table"),":/images/table.png",Element::ElementType::Table), 0, 0);
+    layout->addWidget(createCellWidget(tr("Chair"),":/images/chair.png", Element::ElementType::Chair), 0, 1);
+    layout->addWidget(createCellWidget(tr("Stage"),":/images/stage.png", Element::ElementType::Stage), 1, 0);
+    layout->addWidget(createCellWidget(tr("Buffet"),":/images/buffet.png", Element::ElementType::Buffet), 1, 1);
 
     layout->setRowStretch(3, 10);
     layout->setColumnStretch(2, 10);
@@ -235,19 +186,19 @@ void OEvents::createPanel()
 
 void OEvents::createActions()
 {
-    QMenu* fileMenu = menuBar()->addMenu(tr("&File"));
+    //bara de meniu + bara de instrumente
+    QMenu* fileMenu = menuBar()->addMenu(tr("File"));
     QToolBar* fileToolBar = addToolBar(tr("File"));
     const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
-    QAction* newAct = new QAction(newIcon, tr("&New"), this);
+    QAction* newAct = new QAction(newIcon, tr("New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, &QAction::triggered, this, &OEvents::newProject);
     fileMenu->addAction(newAct);
-    //
     fileToolBar->addAction(newAct);
 
     const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/images/open.png"));
-    QAction* openAct = new QAction(openIcon, tr("&Open..."), this);
+    QAction* openAct = new QAction(openIcon, tr("Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(tr("Open an existing file"));
     connect(openAct, &QAction::triggered, this, &OEvents::openProject);
@@ -255,7 +206,7 @@ void OEvents::createActions()
     fileToolBar->addAction(openAct);
 
     const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
-    QAction* saveAct = new QAction(saveIcon, tr("&Save"), this);
+    QAction* saveAct = new QAction(saveIcon, tr("Save"), this);
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Save the project to disk"));
     connect(saveAct, &QAction::triggered, this, &OEvents::save);
@@ -263,48 +214,46 @@ void OEvents::createActions()
     fileToolBar->addAction(saveAct);
 
 
-    fileMenu->addSeparator();
-    deleteAction = new QAction(QIcon(":/images/delete.png"), tr("&Delete"), this);
-    deleteAction->setShortcut(tr("Delete"));
-    deleteAction->setStatusTip(tr("Delete item from scene"));
-    connect(deleteAction, &QAction::triggered, this, &OEvents::deleteItem);
-
-    exitAction = new QAction(tr("E&xit"), this);
-    exitAction->setShortcuts(QKeySequence::Quit);
-    exitAction->setStatusTip(tr("Quit application"));
-    connect(exitAction, &QAction::triggered, this, &QWidget::close);
-
     const QIcon exitIcon = QIcon::fromTheme("application-exit");
-    QAction* exitAct = fileMenu->addAction(exitIcon, tr("E&xit"), this, &QWidget::close);
+    QAction* exitAct = fileMenu->addAction(exitIcon, tr("Exit"), this, &QWidget::close);
     exitAct->setShortcuts(QKeySequence::Quit);
-    
     exitAct->setStatusTip(tr("Exit the application"));
 
     QMenu* editMenu = menuBar()->addMenu(tr("&Edit"));
-    //adaugare si in bara cu instrumente de editare
     QToolBar* editToolBar = addToolBar(tr("Edit"));
+    const QIcon deleteIcon = QIcon::fromTheme("item-delete", QIcon(":/images/delete.png"));
+    QAction* deleteAction = new QAction(deleteIcon, tr("Delete"), this);
+    deleteAction->setShortcut(tr("Delete"));
+    deleteAction->setStatusTip(tr("Delete item from scene"));
+    connect(deleteAction, &QAction::triggered, this, &OEvents::deleteItem);
+    editMenu->addAction(deleteAction);
+    editToolBar->addAction(deleteAction);
+
+    const QIcon copyIcon = QIcon::fromTheme("item-copy", QIcon(":/images/copy.png"));
+    QAction* copyAction = new QAction(copyIcon, tr("Duplicate"), this);
+    copyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
+    copyAction->setStatusTip(tr("Duplicate item from scene"));
+    //connect(copyAction, &QAction::triggered, this, &OEvents::duplicateItem);
+    editMenu->addAction(copyAction);
+    editToolBar->addAction(copyAction);
 
 
-    QMenu* helpMenu = menuBar()->addMenu(tr("&Help"));
-    QAction* aboutAct = helpMenu->addAction(tr("&About"), this, &OEvents::about);
+    QMenu* helpMenu = menuBar()->addMenu(tr("Help"));
+    QAction* aboutAct = helpMenu->addAction(tr("About"), this, &OEvents::about);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     aboutAct->setShortcut(tr("F1"));
-
-
-    QAction* aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+    QAction* aboutQtAct = helpMenu->addAction(tr("About Qt"), qApp, &QApplication::aboutQt);
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
 
 }
 
 void OEvents::createToolbars()
 {
-    editToolBar = addToolBar(tr("Edit"));
-    editToolBar->addAction(deleteAction);
-
     //fill
     fillColorToolButton = new QToolButton;
     fillColorToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     fillColorToolButton->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
+    fillColorToolButton->setStatusTip(tr("Item fill color"));
     fillAction = fillColorToolButton->menu()->defaultAction();
     fillColorToolButton->setIcon(createColorToolButtonIcon(":/images/floodfill.png", Qt::white));
     connect(fillColorToolButton, &QAbstractButton::clicked,this, &OEvents::fillButtonTriggered);
@@ -313,24 +262,17 @@ void OEvents::createToolbars()
     lineColorToolButton = new QToolButton;
     lineColorToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     lineColorToolButton->setMenu(createColorMenu(SLOT(lineColorChanged()), Qt::black));
+    lineColorToolButton->setStatusTip(tr("Item line color"));
     lineAction = lineColorToolButton->menu()->defaultAction();
     lineColorToolButton->setIcon(createColorToolButtonIcon(":/images/linecolor.png", Qt::black));
-    //connect(lineColorToolButton, &QAbstractButton::clicked,this, &OEvents::lineButtonTriggered);
+    connect(lineColorToolButton, &QAbstractButton::clicked,this, &OEvents::lineButtonTriggered);
 
     colorToolBar = addToolBar(tr("Color"));
     colorToolBar->addWidget(fillColorToolButton);
     colorToolBar->addWidget(lineColorToolButton);
 
-    QToolButton* pointerButton = new QToolButton;
-    pointerButton->setCheckable(true);
-    pointerButton->setChecked(true);
-    pointerButton->setIcon(QIcon(":/images/pointer.png"));
-    QToolButton* linePointerButton = new QToolButton;
-    linePointerButton->setCheckable(true);
-    linePointerButton->setIcon(QIcon(":/images/linepointer.png"));
-
-
     sceneScaleCombo = new QComboBox;
+    sceneScaleCombo->setStatusTip(tr("Zoom"));
     QStringList scales;
     scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%");
     sceneScaleCombo->addItems(scales);
@@ -338,21 +280,19 @@ void OEvents::createToolbars()
     connect(sceneScaleCombo, &QComboBox::currentTextChanged, this, &OEvents::sceneScaleChanged);
 
     pointerToolbar = addToolBar(tr("Pointer type"));
-    pointerToolbar->addWidget(pointerButton);
-    pointerToolbar->addWidget(linePointerButton);
     pointerToolbar->addWidget(sceneScaleCombo);
 }
 
 
 //cell table cu elemente disponibile de pus in plan
-QWidget* OEvents::createCellWidget(const QString & text,const QString & image)
+QWidget* OEvents::createCellWidget(const QString & text,const QString & image,Element::ElementType type)
 {
-    Element item( itemMenu);
 
     QToolButton* button = new QToolButton;
     button->setIconSize(QSize(50, 50));
     button->setIcon(QIcon(image));
     button->setCheckable(true);
+    buttonGroup->addButton(button, int(type));
 
     QGridLayout* layout = new QGridLayout;
     layout->addWidget(button, 0, 0, Qt::AlignHCenter);
@@ -362,6 +302,18 @@ QWidget* OEvents::createCellWidget(const QString & text,const QString & image)
     widget->setLayout(layout);
 
     return widget;
+}
+void OEvents::buttonGroupClicked(QAbstractButton* button)
+{
+    const QList<QAbstractButton*> buttons = buttonGroup->buttons();
+    for (QAbstractButton* myButton : buttons) {
+        if (myButton != button)
+            button->setChecked(false);
+    }
+    const int id = buttonGroup->id(button);
+    
+    scene->setItemType(Element::ElementType(id));
+    scene->setMode(PlanScene::InsertItem);
 }
 
 //sectiune din care pot alege culoarea
