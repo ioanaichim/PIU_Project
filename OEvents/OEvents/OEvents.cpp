@@ -9,7 +9,7 @@ OEvents::OEvents()
 
     scene = new PlanScene(itemMenu, this);
     scene->setSceneRect(QRectF(0, 0, 5000, 5000));
-    connect(scene, &PlanScene::itemInserted,this, &OEvents::itemInserted);
+    //connect(scene, &PlanScene::itemInserted,this, &OEvents::itemInserted);
     connect(scene, &PlanScene::itemSelected,this, &OEvents::itemSelected);
     //connect(scene, &PlanScene::duplicateItem, this, &OEvents::duplicateItem);
     createToolbars();
@@ -23,7 +23,7 @@ OEvents::OEvents()
     widget->setLayout(layout);
 
     setCentralWidget(widget);
-    setWindowTitle(tr("PlanScene"));
+    setWindowTitle(tr("Oevents"));
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
@@ -60,7 +60,7 @@ void OEvents::createStatusBar()
     statusBar()->showMessage(tr("Ready"));
 }
 
-//acea fct care avertizeaza userul ca nu si-a salvat ultimele modificari facte in proiect
+//acea fct care avertizeaza userul ca nu si-a salvat ultimele modificari facute in proiect
 bool OEvents::maybeSave()
 {
     if (scene->hasChanges())
@@ -106,17 +106,6 @@ void OEvents::deleteItem()
     }
 }
 
-void OEvents::duplicateItem(Element *item)
-{
-    //TODO
-}
-
-void OEvents::itemInserted(Element* item)
-{
-    //pointerTypeGroup->button(int(PlanScene::MoveItem))->setChecked(true);
-    //scene->setMode(PlanScene::Mode(pointerTypeGroup->checkedId()));
-   
-}
 
 void OEvents::sceneScaleChanged(const QString& scale)
 {
@@ -133,6 +122,10 @@ void OEvents::itemColorChanged()
     fillColorToolButton->setIcon(createColorToolButtonIcon( ":/images/floodfill.png",
         qvariant_cast<QColor>(fillAction->data())));
     fillButtonTriggered();
+}
+
+void OEvents::lineColorChanged()
+{
 }
 
 void OEvents::fillButtonTriggered()
@@ -175,13 +168,21 @@ void OEvents::createPanel()
     QWidget* itemWidget = new QWidget;
     itemWidget->setLayout(layout);
 
-    QWidget* proprietiesWidget = new QWidget;
+
+    QWidget* propertiesWidget = new QWidget;
+    QVBoxLayout* propertiesLayout = new QVBoxLayout(propertiesWidget);
+    propertiesLayout->addWidget(createCellWidgetProperty("Length:"));
+    propertiesLayout->addWidget(createCellWidgetProperty("Width:"));
+    propertiesLayout->addWidget(createCellWidgetProperty("Position x:"));
+    propertiesLayout->addWidget(createCellWidgetProperty("Position y:"));
+    
+    propertiesWidget->setLayout(propertiesLayout);
 
     toolBox = new QToolBox;
     toolBox->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Ignored));
     toolBox->setMinimumWidth(itemWidget->sizeHint().width());
     toolBox->addItem(itemWidget, tr("Basic Elements "));
-    toolBox->addItem(proprietiesWidget, tr("Element Proprieties "));
+    toolBox->addItem(propertiesWidget, tr("Element Properties "));
 }
 
 void OEvents::createActions()
@@ -274,7 +275,7 @@ void OEvents::createToolbars()
     sceneScaleCombo = new QComboBox;
     sceneScaleCombo->setStatusTip(tr("Zoom"));
     QStringList scales;
-    scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%");
+    scales << tr("50%") << tr("75%") << tr("100%") << tr("125%") << tr("150%")<< tr("200%");
     sceneScaleCombo->addItems(scales);
     sceneScaleCombo->setCurrentIndex(2);
     connect(sceneScaleCombo, &QComboBox::currentTextChanged, this, &OEvents::sceneScaleChanged);
@@ -303,6 +304,21 @@ QWidget* OEvents::createCellWidget(const QString & text,const QString & image,El
 
     return widget;
 }
+QWidget* OEvents::createCellWidgetProperty(const QString& name)
+{
+
+    QWidget* widget = new QWidget;
+    QGridLayout* layout = new QGridLayout;
+    QSpinBox* value = new QSpinBox(widget);
+    layout->addWidget(new QLabel(name), 0, 0);
+    layout->addWidget(value, 0, 1);
+    //connect(value, QSpinBox::valueChanged, scene, propertyChanged);
+
+    widget->setLayout(layout);
+
+    return widget;
+}
+
 void OEvents::buttonGroupClicked(QAbstractButton* button)
 {
     const QList<QAbstractButton*> buttons = buttonGroup->buttons();

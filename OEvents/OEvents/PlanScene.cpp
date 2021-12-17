@@ -57,14 +57,14 @@ void PlanScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
     Element* item;
     switch (myMode) {
     case InsertItem:
-        item = new Element(myItemShape,myItemColor,myItemMenu);
+        item = new Element(myItemType,myItemMenu);
         item->setBrush(myItemColor);
         addItem(item);
+        item->updateCoordinates(mouseEvent->scenePos());
         item->setPos(mouseEvent->scenePos());
         emit itemInserted(item);
         break;
-       
-
+      
     default:
         ;
     }
@@ -80,7 +80,12 @@ void PlanScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 
 void PlanScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
-
+    if (myMode == InsertItem)  myMode = Mode::MoveItem;
+    if (myMode == MoveItem)
+    {
+        //check collision
+        
+    }
     QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 

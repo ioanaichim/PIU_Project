@@ -29,12 +29,10 @@ private slots:
 
    //---- actiuni/schimbari pe elementele ce se adauga in plan
     void deleteItem();
-    void duplicateItem(Element* item);//TODO
-    void itemInserted(Element* item);
 
     void sceneScaleChanged(const QString& scale);
     void itemColorChanged();
-    //void lineColorChanged();
+    void lineColorChanged();
     void fillButtonTriggered();
     void lineButtonTriggered();
     void itemSelected(QGraphicsItem* item);
@@ -43,8 +41,7 @@ private:
     //tine de asezarea componentelor in aplicatie, in fereastra principala
     void createActions();
     void createStatusBar();
-    //void readSettings();
-    //void writeSettings();
+
 
     //panel cu elemente disponibile de pus in plan
     void createPanel();
@@ -53,6 +50,7 @@ private:
    
     //celula de baza de afisare a elementelor ce sunt disponibile
     QWidget* createCellWidget(const QString& text, const QString& image, Element::ElementType type);
+    QWidget* createCellWidgetProperty(const QString& name);
     void buttonGroupClicked(QAbstractButton* button);
     //meniu din care se pot alege culori
     QMenu* createColorMenu(const char* slot, QColor defaultColor);

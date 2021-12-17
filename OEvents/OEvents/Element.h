@@ -11,15 +11,17 @@
 class Element : public QGraphicsPolygonItem
 {
 public:
-   //enum{table, chair ,scene};
+   
     enum ElementType { Table, Chair, Stage, Buffet };
     enum Shape { Round, Square, Rectangle};
 
     //constructor cu valori default
-    Element(Shape shape, QColor color , QMenu* contextMenu, QSizeF size = { 10, 10 }, QPointF refpoint = { 50,50 }, QGraphicsItem* parent = nullptr);
+    Element(Shape shape, QColor color , QMenu* contextMenu, QSizeF size = { 50, 50 }, QPointF refpoint = { 0,0 }, QGraphicsItem* parent = nullptr);
+    Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent = nullptr);
+
 
     QPolygonF polygon() const { return myFigure; }
-    void updateCoordinates();
+    void updateCoordinates(QPointF point);
     void updateSize();
     void updateColor();
 
@@ -37,7 +39,7 @@ private:
     QSizeF mySize;//precizie float
     QColor myColor;
     Shape myShape;
-
+    ElementType myType;
 };
 
 
