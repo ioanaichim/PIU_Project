@@ -1,23 +1,11 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-//#include "ui_OEvents.h"
-//#include <QMainWindow>
-//#include <QWidget>
-//#include <QVBoxLayout>
-//#include <QPushButton>
-//#include <QLabel>
-//#include <QLineEdit>
-//#include <QGroupBox>
-//#include <QTextEdit>
-//#include <QTextEdit>
-//#include <QCheckBox>
-//#include <QListWidget>
-//#include <QPainter>
-//#include <QMessageBox>
+
 #include <iostream>
 #include "Element.h"
 #include "PlanScene.h"
+#include "PlanDialog.h"
 #include <QToolBox>
 
 #include <QtWidgets>
@@ -36,33 +24,39 @@ private slots:
     void newProject();//TODO
     void openProject();//TODO
     bool save();//TODO
-    bool maybeSave();//TODO
-    void about();//TODO
+    bool maybeSave();//TODO--- made
+    void about();//TODO--prototype made
     void projectWasModified();//TODO
-
+    void addPlan();
    //---- actiuni/schimbari pe elementele ce se adauga in plan
     void deleteItem();
-    void itemInserted(Element* item);
+
+    void duplicateItem();
 
     void sceneScaleChanged(const QString& scale);
     void itemColorChanged();
-    //void lineColorChanged();
+    void lineColorChanged();
     void fillButtonTriggered();
+    void lineButtonTriggered();
     void itemSelected(QGraphicsItem* item);
 
+    void itemInserted(Element* item);
+
 private:
-    //tine de asezarea componentelor in aplicatie
+    //tine de asezarea componentelor in aplicatie, in fereastra principala
     void createActions();
     void createStatusBar();
-    //void readSettings();
-    //void writeSettings();
 
-    //panel cu elemente disponibile
+
+    //panel cu elemente disponibile de pus in plan
     void createPanel();
     //bara cu instrumente ce se pot aplica pe elementul selectat
     void createToolbars();
    
-    QWidget* createCellWidget(const QString& text, const QString& image);
+    //celula de baza de afisare a elementelor ce sunt disponibile
+    QWidget* createCellWidget(const QString& text, const QString& image, Element::ElementType type);
+    QWidget* createCellWidgetProperty(const QString& name,double val);
+    void buttonGroupClicked(QAbstractButton* button);
     //meniu din care se pot alege culori
     QMenu* createColorMenu(const char* slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString& image, QColor color);
@@ -70,13 +64,14 @@ private:
 
     PlanScene* scene;
     QGraphicsView* view;
-
+    PlanDialog* planDialog;
+    QWidget* workwidget;
+    Room* room;
     QString projectName;
 
     QAction* exitAction;
     QAction* addAction;
     QAction* deleteAction;
-
     QAction* aboutAction;
 
     QMenu* fileMenu;
@@ -91,14 +86,14 @@ private:
     QComboBox* sceneScaleCombo;
     QComboBox* itemColorCombo;
 
+    QWidget* propertiesWidget;
     QToolBox* toolBox;
-   /* QButtonGroup* buttonGroup;
-    QButtonGroup* pointerTypeGroup;
-    QButtonGroup* backgroundButtonGroup;*/
     QToolButton* fillColorToolButton;
     QToolButton* lineColorToolButton;
+    QButtonGroup* buttonGroup;
 
     QAction* fillAction;
     QAction* lineAction;
+
 };
 

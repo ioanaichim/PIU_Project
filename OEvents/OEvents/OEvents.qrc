@@ -13,5 +13,8 @@
         <file>table.png</file>
         <file>text-color.png</file>
         <file>zoom.png</file>
+        <file>copy.png</file>
+        <file>buffet.png</file>
+        <file>stage.png</file>
     </qresource>
 </RCC>
