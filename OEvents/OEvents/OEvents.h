@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Element.h"
 #include "PlanScene.h"
+#include "PlanDialog.h"
 #include <QToolBox>
 
 #include <QtWidgets>
@@ -26,9 +27,11 @@ private slots:
     bool maybeSave();//TODO--- made
     void about();//TODO--prototype made
     void projectWasModified();//TODO
-
+    void addPlan();
    //---- actiuni/schimbari pe elementele ce se adauga in plan
     void deleteItem();
+
+    void duplicateItem();
 
     void sceneScaleChanged(const QString& scale);
     void itemColorChanged();
@@ -36,6 +39,8 @@ private slots:
     void fillButtonTriggered();
     void lineButtonTriggered();
     void itemSelected(QGraphicsItem* item);
+
+    void itemInserted(Element* item);
 
 private:
     //tine de asezarea componentelor in aplicatie, in fereastra principala
@@ -50,7 +55,7 @@ private:
    
     //celula de baza de afisare a elementelor ce sunt disponibile
     QWidget* createCellWidget(const QString& text, const QString& image, Element::ElementType type);
-    QWidget* createCellWidgetProperty(const QString& name);
+    QWidget* createCellWidgetProperty(const QString& name,double val);
     void buttonGroupClicked(QAbstractButton* button);
     //meniu din care se pot alege culori
     QMenu* createColorMenu(const char* slot, QColor defaultColor);
@@ -59,13 +64,14 @@ private:
 
     PlanScene* scene;
     QGraphicsView* view;
-
+    PlanDialog* planDialog;
+    QWidget* workwidget;
+    Room* room;
     QString projectName;
 
     QAction* exitAction;
     QAction* addAction;
     QAction* deleteAction;
-
     QAction* aboutAction;
 
     QMenu* fileMenu;
@@ -80,6 +86,7 @@ private:
     QComboBox* sceneScaleCombo;
     QComboBox* itemColorCombo;
 
+    QWidget* propertiesWidget;
     QToolBox* toolBox;
     QToolButton* fillColorToolButton;
     QToolButton* lineColorToolButton;

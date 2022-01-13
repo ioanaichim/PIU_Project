@@ -26,6 +26,7 @@ public slots:
     void setItemShape(Element::Shape shape);
     void setItemType(Element::ElementType type);
 
+
 signals:
     void itemInserted(Element* item);
     void itemSelected(QGraphicsItem* item);

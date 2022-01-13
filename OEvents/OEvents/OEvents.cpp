@@ -1,4 +1,5 @@
 #include "OEvents.h"
+#include "PlanDialog.h"
 
 //ceea ce trebuia sa apara in fereastra principala
 OEvents::OEvents()
@@ -11,7 +12,8 @@ OEvents::OEvents()
     scene->setSceneRect(QRectF(0, 0, 5000, 5000));
     //connect(scene, &PlanScene::itemInserted,this, &OEvents::itemInserted);
     connect(scene, &PlanScene::itemSelected,this, &OEvents::itemSelected);
-    //connect(scene, &PlanScene::duplicateItem, this, &OEvents::duplicateItem);
+    
+   
     createToolbars();
 
     QHBoxLayout* layout = new QHBoxLayout;
@@ -19,17 +21,24 @@ OEvents::OEvents()
     view = new QGraphicsView(scene);
     layout->addWidget(view);
 
-    QWidget* widget = new QWidget;
-    widget->setLayout(layout);
+    QWidget* workwidget = new QWidget;
+    workwidget->setLayout(layout);
+    //workwidget->setVisible(false);
 
-    setCentralWidget(widget);
-    setWindowTitle(tr("Oevents"));
+    setCentralWidget(workwidget);
+    setWindowTitle(tr("OEvents"));
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
 void OEvents::newProject()
 {
     //TODO
+    room = new Room();
+    addPlan();
+    //planDialog = new PlanDialog(room, this);
+    //planDialog->setModal(true);
+    //planDialog->exec();
+    //connect(planDialog, &PlanDialog::planInserted, this, &OEvents::addPlan);
 }
 
 void OEvents::loadProject(const QString& fileName)
@@ -83,7 +92,29 @@ bool OEvents::maybeSave()
 
 bool OEvents::save()
 {
+    QString fileName = QFileDialog::getSaveFileName(this,
+        tr("Save Plan Scene"), "",
+        tr("Json file (*.json);;All Files (*)"));
 
+    QFile saveFile=QString(fileName);
+
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
+    for each (QGraphicsItem * item in scene->items())
+    {
+        QJsonObject planObject;
+        /*planObject["type"] = item->type();   
+        planObject["shape"] = item->shape();
+        planObject["size"] = item->size();
+        planObject["coords"] = item->pos();    
+        planObject["color"] = item->color();
+        write(planObject);*/
+        saveFile.write(QJsonDocument(planObject).toJson());
+    } 
+
+    return true;
     //TODO functionalitate de scriere a datelor necasare intr-un fisier text de exemplu
 
     statusBar()->showMessage(tr("File saved"), 2000);
@@ -96,6 +127,18 @@ void OEvents::projectWasModified()
     //TODO
 }
 
+void OEvents::addPlan()
+{ 
+    //workwidget->setVisible(true);
+    // if(scene->items().count()>0)
+    scene->clear();
+    room->setBrush(Qt::darkYellow);
+    
+    scene->addItem(room);
+    
+
+}
+
 void OEvents::deleteItem()
 {
     QList<QGraphicsItem*> selectedItems = scene->selectedItems();
@@ -103,6 +146,15 @@ void OEvents::deleteItem()
     for (QGraphicsItem* item : qAsConst(selectedItems)) {
         scene->removeItem(item);
         delete item;
+    }
+}
+void OEvents::duplicateItem()
+{
+    QList<QGraphicsItem*> selectedItems = scene->selectedItems();
+
+    for (QGraphicsItem* item : qAsConst(selectedItems)) {
+        scene->addItem(item);
+        
     }
 }
 
@@ -140,6 +192,23 @@ void OEvents::lineButtonTriggered()
 
 void OEvents::itemSelected(QGraphicsItem* item)
 {
+    Element* selItem =qgraphicsitem_cast<Element*>(item);
+    //update properties
+    QVBoxLayout* propertiesLayout = new QVBoxLayout(propertiesWidget);
+    propertiesLayout->addWidget(createCellWidgetProperty("Length:", selItem->getmySize().height()));
+    propertiesLayout->addWidget(createCellWidgetProperty("Width:", selItem->getmySize().width()));
+    propertiesLayout->addWidget(createCellWidgetProperty("Position x:", selItem->getmyCoordinates().x()));
+    propertiesLayout->addWidget(createCellWidgetProperty("Position y:", selItem->getmyCoordinates().y()));
+
+    propertiesWidget->setLayout(propertiesLayout);
+    
+}
+
+void OEvents::itemInserted(Element* item)
+{
+    /*pointerTypeGroup->button(int(PlanScene::MoveItem))->setChecked(true);
+    scene->setMode(PlanScene::Mode(pointerTypeGroup->checkedId()));
+    buttonGroup->button(int(item->diagramType()))->setChecked(false);*/
 }
 
 void OEvents::about()
@@ -168,14 +237,13 @@ void OEvents::createPanel()
     QWidget* itemWidget = new QWidget;
     itemWidget->setLayout(layout);
 
-
     QWidget* propertiesWidget = new QWidget;
     QVBoxLayout* propertiesLayout = new QVBoxLayout(propertiesWidget);
-    propertiesLayout->addWidget(createCellWidgetProperty("Length:"));
-    propertiesLayout->addWidget(createCellWidgetProperty("Width:"));
-    propertiesLayout->addWidget(createCellWidgetProperty("Position x:"));
-    propertiesLayout->addWidget(createCellWidgetProperty("Position y:"));
-    
+    propertiesLayout->addWidget(createCellWidgetProperty("Length:", 0.0));
+    propertiesLayout->addWidget(createCellWidgetProperty("Width:", 0.0 /*selItem->getmySize().width()*/));
+    propertiesLayout->addWidget(createCellWidgetProperty("Position x:", 0.0 /*selItem->getmyCoordinates().x()*/));
+    propertiesLayout->addWidget(createCellWidgetProperty("Position y:", 0.0/*selItem->getmyCoordinates().y()*/));
+
     propertiesWidget->setLayout(propertiesLayout);
 
     toolBox = new QToolBox;
@@ -183,6 +251,8 @@ void OEvents::createPanel()
     toolBox->setMinimumWidth(itemWidget->sizeHint().width());
     toolBox->addItem(itemWidget, tr("Basic Elements "));
     toolBox->addItem(propertiesWidget, tr("Element Properties "));
+
+
 }
 
 void OEvents::createActions()
@@ -234,6 +304,7 @@ void OEvents::createActions()
     QAction* copyAction = new QAction(copyIcon, tr("Duplicate"), this);
     copyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
     copyAction->setStatusTip(tr("Duplicate item from scene"));
+    connect(copyAction, &QAction::triggered, this, &OEvents::duplicateItem);
     //connect(copyAction, &QAction::triggered, this, &OEvents::duplicateItem);
     editMenu->addAction(copyAction);
     editToolBar->addAction(copyAction);
@@ -304,12 +375,12 @@ QWidget* OEvents::createCellWidget(const QString & text,const QString & image,El
 
     return widget;
 }
-QWidget* OEvents::createCellWidgetProperty(const QString& name)
+QWidget* OEvents::createCellWidgetProperty(const QString& name,double val)
 {
-
     QWidget* widget = new QWidget;
     QGridLayout* layout = new QGridLayout;
-    QSpinBox* value = new QSpinBox(widget);
+    QDoubleSpinBox* value = new QDoubleSpinBox(widget);
+    value->setValue(val);
     layout->addWidget(new QLabel(name), 0, 0);
     layout->addWidget(value, 0, 1);
     //connect(value, QSpinBox::valueChanged, scene, propertyChanged);

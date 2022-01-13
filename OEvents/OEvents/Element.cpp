@@ -1,7 +1,7 @@
 #include "Element.h"
 
 Element::Element(Shape shape, QColor color, QMenu* contextMenu, QSizeF size , QPointF refpoint, QGraphicsItem* parent )
-    : QGraphicsPolygonItem(parent), myContextMenu(contextMenu)
+   
 {
     //setez parametrii
     myCoordinates = refpoint;
@@ -11,30 +11,33 @@ Element::Element(Shape shape, QColor color, QMenu* contextMenu, QSizeF size , QP
 
     setFigure();
 }
-Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent):QGraphicsPolygonItem(parent), myContextMenu(contextMenu)
+Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
 {
-
+    
     //setari valori default in functie de tipul elementului
     switch (type)
     {
     case Table:
         mySize = QSizeF(60,50);
         myShape = Shape::Rectangle;
+        myColor = QColor("green");
         break;
     case Chair:
         mySize = QSizeF(30,30);
-        myShape = Shape::Square;
+        myShape = Shape::Round;
+        myColor = QColor("blue");
         break;
     case Stage:
         mySize = QSizeF(100, 50);
         myShape = Shape::Rectangle;
+        myColor = QColor("gray");
         break;
     case Buffet:
         mySize = QSizeF(80, 40);
         myShape = Shape::Rectangle;
+        myColor = QColor("red");
         break;
     }
-    myColor =QColor("white");
     myCoordinates = QPointF(0,0);
     setFigure();
 }
@@ -42,13 +45,37 @@ void Element::updateCoordinates(QPointF point)
 {
     myCoordinates = point;
 }
-void Element::updateSize()
+void Element::updateSize(QSizeF size)
 {
-    
+    mySize = size;
 }
-void Element::updateColor()
+void Element::updateShape(Shape shape)
 {
+    myShape = shape;
 }
+void Element::updateColor(QColor color)
+{
+    myColor = color;
+}
+//void Element::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+//{
+//    QRectF rect = boundingRect();
+//
+//    QPen pen(myColor, 3);
+//    painter->setPen(pen);
+//    switch(myShape)
+//    {
+//    case Round:
+//        painter->drawEllipse(rect);
+//        break;
+//    case Rectangle:
+//        painter->drawRect(rect);
+//    }
+//}
+//QRectF Element::boundingRect() const
+//{
+//    return QRectF(myCoordinates.x(), myCoordinates.y(), mySize.width(), mySize.height());
+//}
 void Element::setFigure()
 {
     myFigure << QPointF(myCoordinates.x(), myCoordinates.y())
@@ -74,12 +101,16 @@ QVariant Element::itemChange(GraphicsItemChange change, const QVariant& value)
 {
     if (change == QGraphicsItem::ItemPositionChange) {
         
-       // updateCoordinates();
-        update();
+       //updateCoordinates();
+        
     }
     if (change == QGraphicsItem::ItemScaleChange) {
        // updateSize();
-        update();
+        
+    }
+    if (change == QGraphicsItem::ItemSendsGeometryChanges) {
+        // updateShape();
+
     }
 
     return value;
