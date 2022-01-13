@@ -17,7 +17,8 @@ class OEvents : public QMainWindow
 
 public:
     OEvents();
-    void loadProject(const QString& fileName); //TODO
+    //ProcesareJSON json;
+    Element *element;
 
 private slots:
     void newProject();//TODO
@@ -25,6 +26,7 @@ private slots:
     bool save();//TODO
     bool maybeSave();//TODO--- made
     void about();//TODO--prototype made
+    void loadProject(const QString& fileName); //TODO
     void projectWasModified();//TODO
 
    //---- actiuni/schimbari pe elementele ce se adauga in plan
@@ -87,6 +89,5 @@ private:
 
     QAction* fillAction;
     QAction* lineAction;
-
 };
 

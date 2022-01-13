@@ -34,13 +34,29 @@ void OEvents::newProject()
 
 void OEvents::loadProject(const QString& fileName)
 {
+    QString val;
     QFile file(fileName);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("OEvents"),
-            tr("Cannot read file %1:\n%2.")
-            .arg(QDir::toNativeSeparators(fileName), file.errorString()));
-        return;
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        val = file.readAll();
+        file.close();
     }
+    else
+    {
+        cout << "file open failed: " << fileName.toStdString() << endl;
+    }
+
+    QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
+    QJsonObject set = d.object();
+    QJsonValue value = set.value(QString("chair1"));
+    QJsonObject item = value.toObject();
+
+    /* in case of string value get value and convert into string*/
+    QJsonValue subobj = item["color"];
+
+    /* in case of array get array and convert into string*/
+    QJsonArray test = item["coordinates"].toArray();
 
     QTextStream in(&file);//setari salvate intr-un fisier txt de ex
     //TODO creare si apelare fct care citeste setarile si datele din fisier
@@ -50,6 +66,7 @@ void OEvents::loadProject(const QString& fileName)
 
 void OEvents::openProject()
 {
+
     QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
         loadProject(fileName);
@@ -83,8 +100,28 @@ bool OEvents::maybeSave()
 
 bool OEvents::save()
 {
+    //functionalitate de scriere a datelor necasare intr-un fisier JSON
+    QString fileName = QFileDialog::getSaveFileName(this);
 
-    //TODO functionalitate de scriere a datelor necasare intr-un fisier text de exemplu
+    QJsonDocument document;
+    QJsonObject mainObject;
+    mainObject.insert("chair1", element->write());
+    mainObject.insert("chair2", element->write());
+    document.setObject(mainObject);
+    QByteArray bytes = document.toJson(QJsonDocument::Indented);
+
+    QFile file(fileName + ".json");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream iStream(&file);
+        iStream.setCodec("utf-8");
+        iStream << bytes;
+        file.close();
+    }
+    else
+    {
+        cout << "file open failed: " << fileName.toStdString() << endl;
+    }
 
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;

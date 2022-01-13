@@ -40,6 +40,9 @@ private:
     QColor myColor;
     Shape myShape;
     ElementType myType;
+
+public:
+    QJsonObject write();
 };
 
 

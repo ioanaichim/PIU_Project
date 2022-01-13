@@ -1,4 +1,15 @@
 #include "Element.h"
+#include <QFile>
+#include <iostream>
+
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QTextStream>
+
+using namespace std;
 
 Element::Element(Shape shape, QColor color, QMenu* contextMenu, QSizeF size , QPointF refpoint, QGraphicsItem* parent )
     : QGraphicsPolygonItem(parent), myContextMenu(contextMenu)
@@ -63,13 +74,13 @@ void Element::setFigure()
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 }
 
-
 void Element::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     scene()->clearSelection();
     setSelected(true);
     myContextMenu->exec(event->screenPos());
 }
+
 QVariant Element::itemChange(GraphicsItemChange change, const QVariant& value)
 {
     if (change == QGraphicsItem::ItemPositionChange) {
@@ -85,4 +96,9 @@ QVariant Element::itemChange(GraphicsItemChange change, const QVariant& value)
     return value;
 }
 
-
+QJsonObject Element::write()
+{
+    QJsonObject chair;
+    chair.insert("color", "yellow");
+    return chair;
+}
