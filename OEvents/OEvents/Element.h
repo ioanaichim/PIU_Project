@@ -13,10 +13,10 @@ class Element : public QGraphicsPolygonItem
 public:
 
     enum ElementType { Table, Chair, Stage, Buffet };
-    enum Shape { Round, Rectangle };
+    enum ShapeType { Round, Rectangle };
 
     //constructor cu valori default
-    Element(Shape shape, QColor color, QMenu* contextMenu, QSizeF size = { 50, 50 }, QPointF refpoint = { 0,0 }, QGraphicsItem* parent = nullptr);
+    Element(ShapeType shape, QColor color, QMenu* contextMenu, QSizeF size = { 50, 50 }, QPointF refpoint = { 0,0 }, QGraphicsItem* parent = nullptr);
     Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent = nullptr);
 
     /*QRectF boundingRect() const override;
@@ -27,13 +27,13 @@ public:
     QPointF getmyCoordinates() { return myCoordinates; };
     QSizeF getmySize() { return mySize; }
     QColor getmyColor(){ return myColor; };
-    Shape getmyShape() { return myShape; };
+    ShapeType getmyShape() { return myShape; };
     ElementType getmyType() { return myType; };
 
     QPolygonF polygon() const { return myFigure; }
     void updateCoordinates(QPointF point);
     void updateSize(QSizeF size);
-    void updateShape(Shape shape);
+    void updateShape(ShapeType shape);
     void updateColor(QColor color);
 
 protected:
@@ -49,7 +49,7 @@ private:
     QPointF myCoordinates;//precizie float; punctul de referinta este cel din stanga jos
     QSizeF mySize;//precizie float
     QColor myColor;
-    Shape myShape;
+    ShapeType myShape;
     ElementType myType;
 };
 

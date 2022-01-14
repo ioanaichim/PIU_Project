@@ -46,7 +46,7 @@ bool checkCollide(QGraphicsItem* item, QList<QGraphicsItem*> items) {
     }
     return false;
 }
-void PlanScene::setItemShape(Element::Shape shape)
+void PlanScene::setItemShape(Element::ShapeType shape)
 {
     myItemShape = shape;
 }

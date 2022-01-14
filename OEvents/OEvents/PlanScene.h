@@ -23,7 +23,7 @@ public:
 
 public slots:
     void setMode(Mode mode);
-    void setItemShape(Element::Shape shape);
+    void setItemShape(Element::ShapeType shape);
     void setItemType(Element::ElementType type);
 
 
@@ -41,7 +41,7 @@ private:
 
     QMenu* myItemMenu;
     Mode myMode;
-    Element::Shape myItemShape;
+    Element::ShapeType myItemShape;
     Element::ElementType myItemType;
     
     //punctul in care plasez item-ul

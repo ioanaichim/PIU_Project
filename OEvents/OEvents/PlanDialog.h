@@ -12,7 +12,7 @@ public:
 
     //constructor cu valori default
     
-    Room(int type=1,QGraphicsItem* parent = nullptr);
+    Room(int type=0,QGraphicsItem* parent = nullptr);
 
 
     QSizeF getmySize() { return mySize; }
@@ -40,7 +40,7 @@ public slots:
     void accept();
     void setRoom(int idx);
 
-    void closeEvent(QCloseEvent* event)override;
+
     
 private:
     void createRoomPropertiesBoxes();
