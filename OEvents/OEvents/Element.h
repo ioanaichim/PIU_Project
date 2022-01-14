@@ -40,6 +40,7 @@ public:
     void updateShape(ShapeType shape);
     void updateColor(QColor color);
 
+    QJsonObject write();
 
 protected:
     /* Metode protected */
