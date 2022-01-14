@@ -1,7 +1,8 @@
-#include "Element.h"
+﻿#include "Element.h"
+/* Constructor */
 
 Element::Element(ShapeType shape, QColor color, QMenu* contextMenu, QSizeF size , QPointF refpoint, QGraphicsItem* parent )
-   
+
 {
     //setez parametrii
     myCoordinates = refpoint;
@@ -11,9 +12,10 @@ Element::Element(ShapeType shape, QColor color, QMenu* contextMenu, QSizeF size 
 
     setFigure();
 }
+
+/* Constructor */
 Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
 {
-    
     //setari valori default in functie de tipul elementului
     switch (type)
     {
@@ -41,22 +43,33 @@ Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
     myCoordinates = QPointF(0,0);
     setFigure();
 }
+
+/* Metodă publică pentru actualizarea coordonatelor elementului (punctul din stanga sus) */
 void Element::updateCoordinates(QPointF point)
 {
     myCoordinates = point;
 }
+
+/* Metodă publică pentru actualizarea dimensiunii elementului */
 void Element::updateSize(QSizeF size)
 {
     mySize = size;
 }
+
+
+/* Metodă publică pentru actualizarea formei elementului */
 void Element::updateShape(ShapeType shape)
+
 {
     myShape = shape;
 }
+
+/* Metodă publică pentru actualizarea culorii elementului */
 void Element::updateColor(QColor color)
 {
     myColor = color;
 }
+
 //void Element::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 //{
 //    QRectF rect = boundingRect();
@@ -76,6 +89,8 @@ void Element::updateColor(QColor color)
 //{
 //    return QRectF(myCoordinates.x(), myCoordinates.y(), mySize.width(), mySize.height());
 //}
+
+/* Metodă publică pentru setarea elemetului in functie de coordonatele mouse-ului */
 void Element::setFigure()
 {
     myFigure << QPointF(myCoordinates.x(), myCoordinates.y())
@@ -90,30 +105,10 @@ void Element::setFigure()
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 }
 
-
+/* Metodă publică */
 void Element::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     scene()->clearSelection();
     setSelected(true);
     myContextMenu->exec(event->screenPos());
 }
-QVariant Element::itemChange(GraphicsItemChange change, const QVariant& value)
-{
-    if (change == QGraphicsItem::ItemPositionChange) {
-        
-       //updateCoordinates();
-        
-    }
-    if (change == QGraphicsItem::ItemScaleChange) {
-       // updateSize();
-        
-    }
-    if (change == QGraphicsItem::ItemSendsGeometryChanges) {
-        // updateShape();
-
-    }
-
-    return value;
-}
-
-

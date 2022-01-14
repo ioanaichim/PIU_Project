@@ -1,6 +1,6 @@
 #include "PlanScene.h"
 
-// suprafata pe care se vor aseza elemente
+/* Constructor pentru suprafata pe care se vor aseza elemente */
 PlanScene::PlanScene(QMenu* itemMenu, QObject* parent)
     : QGraphicsScene(parent)
 {
@@ -11,7 +11,7 @@ PlanScene::PlanScene(QMenu* itemMenu, QObject* parent)
     myLineColor = Qt::black;
 }
 
-
+/* Metoda publica pentru setarea culorii item-urilor */
 void PlanScene::setItemColor(const QColor& color)
 {
     myItemColor = color;
@@ -20,6 +20,8 @@ void PlanScene::setItemColor(const QColor& color)
         item->updateColor(myItemColor);
   
 }
+
+/* Metoda publica pentru setarea culorii contururilor item-urilor */
 void PlanScene::setLineColor(const QColor& color)
 {
     myLineColor = color;
@@ -30,6 +32,7 @@ void PlanScene::setLineColor(const QColor& color)
 
 }
 
+/* Metoda publica pentru verificarea schimbarilor */
 bool PlanScene::hasChanges()
 {
    /* const QList<QGraphicsItem*> items = selectedItems();
@@ -37,6 +40,8 @@ bool PlanScene::hasChanges()
     return std::find_if(items.begin(), items.end(), cb) != items.end();*/
     return false;
 }
+
+/* Metoda publica pentru tratarea coleziunilor */
 bool checkCollide(QGraphicsItem* item, QList<QGraphicsItem*> items) {
     QPointF c1 = item->boundingRect().center();
     foreach(QGraphicsItem * t, items) {
@@ -46,22 +51,26 @@ bool checkCollide(QGraphicsItem* item, QList<QGraphicsItem*> items) {
     }
     return false;
 }
+
+/* Metoda publica pentru setarea formei item-ului */
 void PlanScene::setItemShape(Element::ShapeType shape)
 {
     myItemShape = shape;
 }
 
+/* Metoda publica pentru setarea tipului item-ului */
 void PlanScene::setItemType(Element::ElementType type)
 {
     myItemType = type;
 }
 
+/* Metoda publica */
 void PlanScene::setMode(Mode mode)
 {
     myMode = mode;
 }
 
-
+/* Metoda publica pentru tratarea evenimentului mousePress al mouse-ului */
 void PlanScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
     if (mouseEvent->button() != Qt::LeftButton)
@@ -86,6 +95,7 @@ void PlanScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
 
+/* Metoda publica pentru tratarea evenimentului mouseMove al mouse-ului */
 void PlanScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
     if (myMode == MoveItem) {
@@ -93,6 +103,7 @@ void PlanScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
     }
 }
 
+/* Metoda publica pentru tratarea evenimentului mouseRelease al mouse-ului */
 void PlanScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
     if (myMode == InsertItem)  myMode = Mode::MoveItem;

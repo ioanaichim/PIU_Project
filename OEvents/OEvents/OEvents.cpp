@@ -1,7 +1,7 @@
 #include "OEvents.h"
 #include "PlanDialog.h"
 
-//ceea ce trebuia sa apara in fereastra principala
+/* Constructor cu ceea ce trebuia sa apara in fereastra principala*/
 OEvents::OEvents()
 {
     createActions();
@@ -13,7 +13,6 @@ OEvents::OEvents()
     //connect(scene, &PlanScene::itemInserted,this, &OEvents::itemInserted);
     connect(scene, &PlanScene::itemSelected,this, &OEvents::itemSelected);
     
-   
     createToolbars();
 
     QHBoxLayout* layout = new QHBoxLayout;
@@ -30,10 +29,12 @@ OEvents::OEvents()
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
+/* Metoda publica pentru crearea unui proiect nou */
 void OEvents::newProject()
 {
     //TODO
     room = new Room(1);
+
     addPlan();
     //planDialog = new PlanDialog(room, this);
     //planDialog->setModal(true);
@@ -47,6 +48,7 @@ void OEvents::newProject()
     
 }
 
+/* Metoda publica pentru actualizarea unui proiect existent */
 void OEvents::loadProject(const QString& fileName)
 {
     QFile file(fileName);
@@ -63,6 +65,7 @@ void OEvents::loadProject(const QString& fileName)
     statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
+/* Metoda publica pentru deschiderea unui proiect existent */
 void OEvents::openProject()
 {
     QString fileName = QFileDialog::getOpenFileName(this);
@@ -70,12 +73,13 @@ void OEvents::openProject()
         loadProject(fileName);
 }
 
+/* Metoda publica pentru afisarea mesajului initial al status-ului */
 void OEvents::createStatusBar()
 {
     statusBar()->showMessage(tr("Ready"));
 }
 
-//acea fct care avertizeaza userul ca nu si-a salvat ultimele modificari facute in proiect
+/* Metoda pentru avertuzarea userului ca nu au fost salvate ultimele modificari facute in proiect */
 bool OEvents::maybeSave()
 {
     if (scene->hasChanges())
@@ -96,6 +100,7 @@ bool OEvents::maybeSave()
     return true;
 }
 
+/* Metoda publica pentru salvarea documentului */
 bool OEvents::save()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
@@ -127,12 +132,13 @@ bool OEvents::save()
     return true;
 }
 
-
+/* Metoda publica pentru verificarea daca proiectul a fost modificat de la ultima salvare */
 void OEvents::projectWasModified()
 {
-    //TODO
+
 }
 
+/* Metoda publica pentru adaugare unui plan */
 void OEvents::addPlan()
 { 
     //workwidget->setVisible(true);
@@ -146,10 +152,10 @@ void OEvents::addPlan()
     scene->setSceneRect(room->boundingRect());
     scene->addItem(room);
     scene->setFocusItem(room);
-    
 
 }
 
+/* Metoda publica pentru stergerea unui element */
 void OEvents::deleteItem()
 {
     QList<QGraphicsItem*> selectedItems = scene->selectedItems();
@@ -159,6 +165,8 @@ void OEvents::deleteItem()
         delete item;
     }
 }
+
+/* Metoda publica pentru duplicare unui element */
 void OEvents::duplicateItem()
 {
     QList<QGraphicsItem*> selectedItems = scene->selectedItems();
@@ -169,7 +177,7 @@ void OEvents::duplicateItem()
     }
 }
 
-
+/* Metoda publica pentru schimbarea zoom-ului suprafetei de desenare */
 void OEvents::sceneScaleChanged(const QString& scale)
 {
     double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
@@ -179,6 +187,7 @@ void OEvents::sceneScaleChanged(const QString& scale)
     view->scale(newScale, newScale);
 }
 
+/* Metoda publica pentru schimbarea culorii unui element */
 void OEvents::itemColorChanged()
 {
     fillAction = qobject_cast<QAction*>(sender());
@@ -187,20 +196,24 @@ void OEvents::itemColorChanged()
     fillButtonTriggered();
 }
 
+/* Metoda publica pentru schimbarea culorii conturului unui element */
 void OEvents::lineColorChanged()
 {
 }
 
+/* Metoda publica pentru schimbarea culorii unui element */
 void OEvents::fillButtonTriggered()
 {
     scene->setItemColor(qvariant_cast<QColor>(fillAction->data()));
 }
 
+/* Metoda publica pentru schimbarea culorii conturului unui element */
 void OEvents::lineButtonTriggered()
 {
     scene->setLineColor(qvariant_cast<QColor>(lineAction->data()));
 }
 
+/* Metoda publica pentru selectarea unui item din scena cu ajutorul mouse-ului */
 void OEvents::itemSelected(QGraphicsItem* item)
 {
     Element* selItem =qgraphicsitem_cast<Element*>(item);
@@ -215,6 +228,7 @@ void OEvents::itemSelected(QGraphicsItem* item)
     
 }
 
+/* Metoda publica pentru inserare */
 void OEvents::itemInserted(Element* item)
 {
     /*pointerTypeGroup->button(int(PlanScene::MoveItem))->setChecked(true);
@@ -222,15 +236,16 @@ void OEvents::itemInserted(Element* item)
     buttonGroup->button(int(item->diagramType()))->setChecked(false);*/
 }
 
+/* Metoda publica pentru butonul About cu informatii despre proiect */
 void OEvents::about()
 {
     QMessageBox::about(this, tr("About Application"),
-        tr("The <b>OEvents</b> "
+        tr("The <b>OEvents planning</b> "
             "GUI application using Qt, with a menu bar, "
             "toolbars, and a status bar."));
 }
 
-
+/* Metoda publica pentru crearea panelul cu elemente disponibile de pus in plan */
 void OEvents::createPanel()
 {
     buttonGroup = new QButtonGroup(this);
@@ -266,9 +281,9 @@ void OEvents::createPanel()
 
 }
 
+/* Metoda publica pentru construire bara de meniu si bara de instrumente */
 void OEvents::createActions()
 {
-    //bara de meniu + bara de instrumente
     QMenu* fileMenu = menuBar()->addMenu(tr("File"));
     QToolBar* fileToolBar = addToolBar(tr("File"));
     const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
@@ -330,30 +345,9 @@ void OEvents::createActions()
 
 }
 
+/* Metoda publica pentru bara cu instrumente ce se pot aplica pe elementul selectat */
 void OEvents::createToolbars()
 {
-    //fill
-    fillColorToolButton = new QToolButton;
-    fillColorToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    fillColorToolButton->setMenu(createColorMenu(SLOT(itemColorChanged()), Qt::white));
-    fillColorToolButton->setStatusTip(tr("Item fill color"));
-    fillAction = fillColorToolButton->menu()->defaultAction();
-    fillColorToolButton->setIcon(createColorToolButtonIcon(":/images/floodfill.png", Qt::white));
-    connect(fillColorToolButton, &QAbstractButton::clicked,this, &OEvents::fillButtonTriggered);
-  
-    //contur
-    lineColorToolButton = new QToolButton;
-    lineColorToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    lineColorToolButton->setMenu(createColorMenu(SLOT(lineColorChanged()), Qt::black));
-    lineColorToolButton->setStatusTip(tr("Item line color"));
-    lineAction = lineColorToolButton->menu()->defaultAction();
-    lineColorToolButton->setIcon(createColorToolButtonIcon(":/images/linecolor.png", Qt::black));
-    connect(lineColorToolButton, &QAbstractButton::clicked,this, &OEvents::lineButtonTriggered);
-
-    colorToolBar = addToolBar(tr("Color"));
-    colorToolBar->addWidget(fillColorToolButton);
-    colorToolBar->addWidget(lineColorToolButton);
-
     sceneScaleCombo = new QComboBox;
     sceneScaleCombo->setStatusTip(tr("Zoom"));
     QStringList scales;
@@ -366,8 +360,7 @@ void OEvents::createToolbars()
     pointerToolbar->addWidget(sceneScaleCombo);
 }
 
-
-//cell table cu elemente disponibile de pus in plan
+/* Metoda publica pentru celula de baza de afisare a elementelor ce sunt disponibile (cell table cu elemente disponibile de pus in plan) */
 QWidget* OEvents::createCellWidget(const QString & text,const QString & image,Element::ElementType type)
 {
 
@@ -386,6 +379,7 @@ QWidget* OEvents::createCellWidget(const QString & text,const QString & image,El
 
     return widget;
 }
+/* Metoda publica pentru crearea celulei de proprietati ale elemetului */
 QWidget* OEvents::createCellWidgetProperty(const QString& name,double val)
 {
     QWidget* widget = new QWidget;
@@ -400,7 +394,7 @@ QWidget* OEvents::createCellWidgetProperty(const QString& name,double val)
 
     return widget;
 }
-
+/* Metoda publica care trateaza un grup de butoane */
 void OEvents::buttonGroupClicked(QAbstractButton* button)
 {
     const QList<QAbstractButton*> buttons = buttonGroup->buttons();
@@ -415,26 +409,28 @@ void OEvents::buttonGroupClicked(QAbstractButton* button)
 }
 
 //sectiune din care pot alege culoarea
-QMenu* OEvents::createColorMenu(const char* slot, QColor defaultColor)
-{
-    QList<QColor> colors;
-    colors << Qt::black << Qt::white << Qt::red << Qt::blue << Qt::yellow;
-    QStringList names;
-    names << tr("black") << tr("white") << tr("red") << tr("blue")
-        << tr("yellow");
+//QMenu* OEvents::createColorMenu(const char* slot, QColor defaultColor)
+//{
+//    QList<QColor> colors;
+//    colors << Qt::black << Qt::white << Qt::red << Qt::blue << Qt::yellow;
+//    QStringList names;
+//    names << tr("black") << tr("white") << tr("red") << tr("blue")
+//        << tr("yellow");
+//
+//    QMenu* colorMenu = new QMenu(this);
+//    for (int i = 0; i < colors.count(); ++i) {
+//        QAction* action = new QAction(names.at(i), this);
+//        action->setData(colors.at(i));
+//        action->setIcon(createColorIcon(colors.at(i)));
+//        connect(action, SIGNAL(triggered()), this, slot);
+//        colorMenu->addAction(action);
+//        if (colors.at(i) == defaultColor)
+//            colorMenu->setDefaultAction(action);
+//    }
+//    return colorMenu;
+//}
 
-    QMenu* colorMenu = new QMenu(this);
-    for (int i = 0; i < colors.count(); ++i) {
-        QAction* action = new QAction(names.at(i), this);
-        action->setData(colors.at(i));
-        action->setIcon(createColorIcon(colors.at(i)));
-        connect(action, SIGNAL(triggered()), this, slot);
-        colorMenu->addAction(action);
-        if (colors.at(i) == defaultColor)
-            colorMenu->setDefaultAction(action);
-    }
-    return colorMenu;
-}
+/* Metoda publica pentru meniul din care se pot alege culori */
 QIcon OEvents::createColorToolButtonIcon(const QString& imageFile, QColor color)
 {
     QPixmap pixmap(50, 80);
@@ -450,6 +446,7 @@ QIcon OEvents::createColorToolButtonIcon(const QString& imageFile, QColor color)
     return QIcon(pixmap);
 }
 
+/* Metoda publica pentru culoare */
 QIcon OEvents::createColorIcon(QColor color)
 {
     QPixmap pixmap(20, 20);
