@@ -45,7 +45,6 @@ private slots:
     void itemColorChanged();
     void lineColorChanged();
     void fillButtonTriggered();
-    void lineButtonTriggered();
     void itemSelected(QGraphicsItem* item);
     void itemInserted(Element* item);
 
