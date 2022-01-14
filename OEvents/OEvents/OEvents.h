@@ -26,6 +26,8 @@ public:
     /* Metode publice */
     OEvents();
     void loadProject(const QString& fileName);
+    /*Proprietate publica*/
+    Element* element;
 
 private slots:
     /* Metode publice */
