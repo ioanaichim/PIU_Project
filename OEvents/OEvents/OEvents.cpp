@@ -124,10 +124,10 @@ bool OEvents::save()
 
     QJsonDocument document;
     QJsonObject mainObject;
-    //mainObject.insert("chair1", element->write());
-    //mainObject.insert("chair2", element->write());
-    mainObject.insert("chair1", "green");
-    mainObject.insert("chair2", "red");
+    mainObject.insert("chair1", element->write());
+    mainObject.insert("chair2", element->write());
+    mainObject.insert("table1", "green");
+    mainObject.insert("table2", "red");
     document.setObject(mainObject);
     QByteArray bytes = document.toJson(QJsonDocument::Indented);
 

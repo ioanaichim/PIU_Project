@@ -114,9 +114,9 @@ void Element::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 }
 
 /* Metoda publica pentru Adaugarea unui element in Json */
-//QJsonObject Element::write()
-//{
-//    QJsonObject chair;
-//    chair.insert("color", "yellow");
-//    return chair;
-//}
+QJsonObject Element::write()
+{
+    QJsonObject chair;
+    chair.insert("color", "yellow");
+    return chair;
+}
