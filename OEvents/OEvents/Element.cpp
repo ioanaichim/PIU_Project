@@ -20,22 +20,22 @@ Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
     switch (type)
     {
     case Table:
-        mySize = QSizeF(60,50);
+        mySize = QSizeF(80,150);
         myShape = ShapeType::Rectangle;
         myColor = QColor("green");
         break;
     case Chair:
-        mySize = QSizeF(30,30);
+        mySize = QSizeF(35,35);
         myShape = ShapeType::Round;
         myColor = QColor("blue");
         break;
     case Stage:
-        mySize = QSizeF(100, 50);
+        mySize = QSizeF(300, 450);
         myShape = ShapeType::Rectangle;
         myColor = QColor("gray");
         break;
     case Buffet:
-        mySize = QSizeF(80, 40);
+        mySize = QSizeF(50, 130);
         myShape = ShapeType::Rectangle;
         myColor = QColor("red");
         break;
