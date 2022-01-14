@@ -223,11 +223,7 @@ void OEvents::fillButtonTriggered()
     scene->setItemColor(qvariant_cast<QColor>(fillAction->data()));
 }
 
-/* Metoda publica pentru schimbarea culorii conturului unui element */
-void OEvents::lineButtonTriggered()
-{
-    scene->setLineColor(qvariant_cast<QColor>(lineAction->data()));
-}
+
 
 /* Metoda publica pentru selectarea unui item din scena cu ajutorul mouse-ului */
 void OEvents::itemSelected(QGraphicsItem* item)

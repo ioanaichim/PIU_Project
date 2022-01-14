@@ -21,16 +21,6 @@ void PlanScene::setItemColor(const QColor& color)
   
 }
 
-/* Metoda publica pentru setarea culorii contururilor item-urilor */
-void PlanScene::setLineColor(const QColor& color)
-{
-    myLineColor = color;
-    Element* item = qgraphicsitem_cast<Element*>(selectedItems().first());
-   //item->setBrush(myLineColor);
-    item->updateColor(myItemColor);
-    update();
-
-}
 
 /* Metoda publica pentru verificarea schimbarilor */
 bool PlanScene::hasChanges()
@@ -81,7 +71,7 @@ void PlanScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
     case InsertItem:
         Element* item;
         item = new Element(myItemType,myItemMenu,room);
-        //item->setBrush(myItemColor);
+        item->setBrush(item->getmyColor());
         //addItem(item);
         item->updateCoordinates(mouseEvent->scenePos());
         item->setPos(mouseEvent->scenePos());
@@ -120,14 +110,14 @@ void PlanScene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
             if (!checkCollide(item, itemlist))
             {
                 //no collision
-                item->updateColor(Qt::green);
-                item->setBrush(Qt::green);
+               /* item->updateColor(Qt::green);
+                item->setBrush(Qt::green);*/
             }
             else
             {
                 //collision!!!!!
-                item->updateColor(Qt::red);
-                item->setBrush(Qt::red);
+               /* item->updateColor(Qt::red);
+                item->setBrush(Qt::red);*/
                 //reset position
                 //DoCollision();
             }

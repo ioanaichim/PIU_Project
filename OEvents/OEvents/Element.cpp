@@ -27,7 +27,7 @@ Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
     case Chair:
         mySize = QSizeF(35,35);
         myShape = ShapeType::Round;
-        myColor = QColor("blue");
+        myColor = QColor("red");
         break;
     case Stage:
         mySize = QSizeF(300, 450);
@@ -37,7 +37,7 @@ Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
     case Buffet:
         mySize = QSizeF(50, 130);
         myShape = ShapeType::Rectangle;
-        myColor = QColor("red");
+        myColor = QColor("purple");
         break;
     }
     myCoordinates = QPointF(0,0);

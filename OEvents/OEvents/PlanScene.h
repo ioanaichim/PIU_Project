@@ -25,7 +25,6 @@ public:
 
     /* Metode publice */
     void setItemColor(const QColor& color);
-    void setLineColor(const QColor& color);
     bool hasChanges();
 
 public slots:
