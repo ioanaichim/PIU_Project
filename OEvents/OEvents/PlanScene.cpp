@@ -53,7 +53,7 @@ bool checkCollide(QGraphicsItem* item, QList<QGraphicsItem*> items) {
 }
 
 /* Metoda publica pentru setarea formei item-ului */
-void PlanScene::setItemShape(Element::Shape shape)
+void PlanScene::setItemShape(Element::ShapeType shape)
 {
     myItemShape = shape;
 }

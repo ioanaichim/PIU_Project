@@ -27,8 +27,10 @@ PlanDialog::PlanDialog(Room *r,QWidget* parent)
     layout->addWidget(doubleSpinBoxesGroup);
     layout->addWidget(buttonBox);
     setLayout(layout);
-   
-    setWindowTitle(tr("Choose your room plan"));
+
+    
+    setWindowTitle(tr("New Project"));
+
 }
 
 /* Metoda publica pentru proprietati */
@@ -80,8 +82,9 @@ void PlanDialog::setSize()
 void PlanDialog::accept()
 {
     setSize();
-    emit planInserted(); 
-    this->close();
+    //emit planInserted(); 
+    setResult(Accepted);
+    close();
 }
 
 /* Metoda publica pentru setarea camerei */
@@ -94,10 +97,6 @@ void PlanDialog::setRoom(int idx)
     heightSpinBox->setValue(myRoom->getmySize().height() / 100);
 }
 
-/* Metoda publica pentru evenimentul de inchidere */
-void PlanDialog::closeEvent(QCloseEvent* event)
-{
-}
 
 //---------------------------------------------------------------------------------------------
 
@@ -107,22 +106,25 @@ Room::Room( int type,QGraphicsItem* parent)
     QPointF myCoordinates = QPointF(0,0);
     
     switch (type) {
-    case 1://rectangle
-        mySize = QSize(100, 200);
-        myFigure << QPointF(myCoordinates.x(), myCoordinates.y())
+    case 0://rectangle
+        mySize = QSizeF(400, 600);
+        myFigure<< QPointF(myCoordinates.x(), myCoordinates.y())
         << QPointF(myCoordinates.x() + mySize.width(), myCoordinates.y())
         << QPointF(myCoordinates.x() + mySize.width(), myCoordinates.y() + mySize.height())
         << QPointF(myCoordinates.x(), myCoordinates.y() + mySize.height())
         << QPointF(myCoordinates.x(), myCoordinates.y());
-    case 2://L shaped
+        break;
+
+    case 1://L shaped
         mySize = QSize(700, 1000);
         myFigure << QPointF(myCoordinates.x(), myCoordinates.y())
             << QPointF(myCoordinates.x() + mySize.width(), myCoordinates.y())
             << QPointF(myCoordinates.x() + mySize.width(), myCoordinates.y() + mySize.height())
             << QPointF(myCoordinates.x() + mySize.width()/2, myCoordinates.y() + mySize.height())
             << QPointF(myCoordinates.x() + mySize.width() / 2, myCoordinates.y() + mySize.height()/2)
-            << QPointF(myCoordinates.x(), myCoordinates.y() + mySize.height())
+            << QPointF(myCoordinates.x(), myCoordinates.y() + mySize.height()/2)
             << QPointF(myCoordinates.x(), myCoordinates.y());
+        break;
     }
 
     setPolygon(myFigure);

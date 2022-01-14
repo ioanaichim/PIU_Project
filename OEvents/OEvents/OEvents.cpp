@@ -22,7 +22,7 @@ OEvents::OEvents()
 
     QWidget* workwidget = new QWidget;
     workwidget->setLayout(layout);
-    //workwidget->setVisible(false);
+    //workwidget->setVisible(false);//indisponibil pana cand se incepe un nou proiect
 
     setCentralWidget(workwidget);
     setWindowTitle(tr("OEvents"));
@@ -32,12 +32,20 @@ OEvents::OEvents()
 /* Metoda publica pentru crearea unui proiect nou */
 void OEvents::newProject()
 {
-    room = new Room();
+    //TODO
+    room = new Room(1);
+
     addPlan();
     //planDialog = new PlanDialog(room, this);
     //planDialog->setModal(true);
-    //planDialog->exec();
-    //connect(planDialog, &PlanDialog::planInserted, this, &OEvents::addPlan);
+    //int dialogCode = planDialog->exec();
+
+    //if (dialogCode == QDialog::Accepted) {
+    //    room = planDialog->getmyRoom(); 
+    //    //connect(planDialog, &PlanDialog::planInserted, this, &OEvents::addPlan);
+    //    addPlan();
+    //}
+    
 }
 
 /* Metoda publica pentru actualizarea unui proiect existent */
@@ -134,11 +142,17 @@ void OEvents::projectWasModified()
 void OEvents::addPlan()
 { 
     //workwidget->setVisible(true);
-    // if(scene->items().count()>0)
-    scene->clear();
-    room->setBrush(Qt::darkYellow);
     
+    QPen pen(Qt::blue, 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    scene->clear();
+    scene->setBackgroundBrush(Qt::gray);
+    room->setPen( pen);
+    room->setBrush(Qt::white);
+
+    scene->setSceneRect(room->boundingRect());
     scene->addItem(room);
+    scene->setFocusItem(room);
+
 }
 
 /* Metoda publica pentru stergerea unui element */

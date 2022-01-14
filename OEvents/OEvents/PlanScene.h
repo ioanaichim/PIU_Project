@@ -30,7 +30,7 @@ public:
 public slots:
     /* Metode de tip slots */
     void setMode(Mode mode);
-    void setItemShape(Element::Shape shape);
+    void setItemShape(Element::ShapeType shape);
     void setItemType(Element::ElementType type);
 
 signals:
@@ -49,7 +49,7 @@ private:
     /* Metode private */
     QMenu* myItemMenu;
     Mode myMode;
-    Element::Shape myItemShape;
+    Element::ShapeType myItemShape;
     Element::ElementType myItemType;
     
     QPointF startPoint;  //punctul in care plasez item-ul

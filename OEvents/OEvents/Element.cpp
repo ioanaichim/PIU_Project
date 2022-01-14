@@ -1,7 +1,8 @@
 ﻿#include "Element.h"
-
 /* Constructor */
-Element::Element(Shape shape, QColor color, QMenu* contextMenu, QSizeF size , QPointF refpoint, QGraphicsItem* parent )
+
+Element::Element(ShapeType shape, QColor color, QMenu* contextMenu, QSizeF size , QPointF refpoint, QGraphicsItem* parent )
+
 {
     //setez parametrii
     myCoordinates = refpoint;
@@ -20,22 +21,22 @@ Element::Element(ElementType type, QMenu* contextMenu, QGraphicsItem* parent)
     {
     case Table:
         mySize = QSizeF(60,50);
-        myShape = Shape::Rectangle;
+        myShape = ShapeType::Rectangle;
         myColor = QColor("green");
         break;
     case Chair:
         mySize = QSizeF(30,30);
-        myShape = Shape::Round;
+        myShape = ShapeType::Round;
         myColor = QColor("blue");
         break;
     case Stage:
         mySize = QSizeF(100, 50);
-        myShape = Shape::Rectangle;
+        myShape = ShapeType::Rectangle;
         myColor = QColor("gray");
         break;
     case Buffet:
         mySize = QSizeF(80, 40);
-        myShape = Shape::Rectangle;
+        myShape = ShapeType::Rectangle;
         myColor = QColor("red");
         break;
     }
@@ -55,8 +56,10 @@ void Element::updateSize(QSizeF size)
     mySize = size;
 }
 
+
 /* Metodă publică pentru actualizarea formei elementului */
-void Element::updateShape(Shape shape)
+void Element::updateShape(ShapeType shape)
+
 {
     myShape = shape;
 }

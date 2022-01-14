@@ -12,8 +12,9 @@ using namespace std;
 class Room : public QGraphicsPolygonItem
 {
 public:
+
      /* Constructor cu valori default */
-    Room(int type=1,QGraphicsItem* parent = nullptr);
+    Room(int type=0,QGraphicsItem* parent = nullptr);
 
     /* Metode publice */
     QSizeF getmySize() { return mySize; }
@@ -48,7 +49,6 @@ public slots:
     void setSize();
     void accept();
     void setRoom(int idx);
-    void closeEvent(QCloseEvent* event)override;
     
 private:
     /* Metoda privata */
