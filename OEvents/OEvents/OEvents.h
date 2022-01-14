@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QtWidgets/QMainWindow>
 
@@ -12,56 +12,59 @@
 
 using namespace std;
 
+/* ! \class OEvents
+     *   \brief Clasă principala a proiectului / GUI
+*/
 class OEvents : public QMainWindow
 {
+    /* Macro non-standard pentru adăugarea unui comportament dinamic al claselor/obiectelor */
+    /* Sintaxa pentru semnale si sloturi nu respectă standardele C++,
+    este prelucrată de MOC, de aceea apare macro-ul Q_OBJECT */
     Q_OBJECT
 
 public:
+    /* Metode publice */
     OEvents();
-    void loadProject(const QString& fileName); //TODO
+    void loadProject(const QString& fileName);
 
 private slots:
-    void newProject();//TODO
-    void openProject();//TODO
-    bool save();//TODO
-    bool maybeSave();//TODO--- made
-    void about();//TODO--prototype made
-    void projectWasModified();//TODO
+    /* Metode publice */
+    void newProject();
+    void openProject();
+    bool save();
+    bool maybeSave();
+    void about();
+    void projectWasModified();
     void addPlan();
-   //---- actiuni/schimbari pe elementele ce se adauga in plan
+    /* Metode publice referitoare la actiuni/schimbari pe elementele ce se adauga in plan*/
     void deleteItem();
-
     void duplicateItem();
-
-    void sceneScaleChanged(const QString& scale);
     void itemColorChanged();
     void lineColorChanged();
     void fillButtonTriggered();
     void lineButtonTriggered();
     void itemSelected(QGraphicsItem* item);
-
     void itemInserted(Element* item);
 
+    void sceneScaleChanged(const QString& scale);
+
 private:
-    //tine de asezarea componentelor in aplicatie, in fereastra principala
+    /* Metode private pentru asezarea componentelor in aplicatie, in fereastra principala */
     void createActions();
     void createStatusBar();
 
-
-    //panel cu elemente disponibile de pus in plan
     void createPanel();
-    //bara cu instrumente ce se pot aplica pe elementul selectat
     void createToolbars();
    
-    //celula de baza de afisare a elementelor ce sunt disponibile
     QWidget* createCellWidget(const QString& text, const QString& image, Element::ElementType type);
     QWidget* createCellWidgetProperty(const QString& name,double val);
     void buttonGroupClicked(QAbstractButton* button);
-    //meniu din care se pot alege culori
-    QMenu* createColorMenu(const char* slot, QColor defaultColor);
+
+    //QMenu* createColorMenu(const char* slot, QColor defaultColor);
     QIcon createColorToolButtonIcon(const QString& image, QColor color);
     QIcon createColorIcon(QColor color);
 
+    /* Proprietatile private ale clasei */
     PlanScene* scene;
     QGraphicsView* view;
     PlanDialog* planDialog;

@@ -1,7 +1,7 @@
 #include "PlanDialog.h"
 
+/* Constructor */
 PlanDialog::PlanDialog(Room *r,QWidget* parent)
-    
 {
     myRoom = r;
     resize(400, 400);
@@ -27,11 +27,11 @@ PlanDialog::PlanDialog(Room *r,QWidget* parent)
     layout->addWidget(doubleSpinBoxesGroup);
     layout->addWidget(buttonBox);
     setLayout(layout);
-    
-
    
     setWindowTitle(tr("Choose your room plan"));
 }
+
+/* Metoda publica pentru proprietati */
 void PlanDialog::createRoomPropertiesBoxes()
 {
     doubleSpinBoxesGroup = new QGroupBox(tr("Room properties:"));
@@ -52,7 +52,6 @@ void PlanDialog::createRoomPropertiesBoxes()
     heightSpinBox->setRange(2.0, 400.0); // 2m - 40m
     heightSpinBox->setSingleStep(0.5);
     heightSpinBox->setValue(20.0);
-   
 
     connect(precisionSpinBox, QOverload<int>::of(&QSpinBox::valueChanged),this, &PlanDialog::changePrecision);
   
@@ -69,7 +68,7 @@ void PlanDialog::createRoomPropertiesBoxes()
     doubleSpinBoxesGroup->setDisabled(true);
 }
 
-
+/* Metoda publica pentru setarea dimensiunilor camerei */
 void PlanDialog::setSize()
 {
     double w = widthSpinBox->value();
@@ -77,6 +76,7 @@ void PlanDialog::setSize()
     myRoom->updateSize(QSizeF(w * 100, h*100));
 }
 
+/* Metoda publica */
 void PlanDialog::accept()
 {
     setSize();
@@ -84,6 +84,7 @@ void PlanDialog::accept()
     this->close();
 }
 
+/* Metoda publica pentru setarea camerei */
 void PlanDialog::setRoom(int idx)
 {
     myRoom = new Room(idx);
@@ -93,12 +94,14 @@ void PlanDialog::setRoom(int idx)
     heightSpinBox->setValue(myRoom->getmySize().height() / 100);
 }
 
+/* Metoda publica pentru evenimentul de inchidere */
 void PlanDialog::closeEvent(QCloseEvent* event)
 {
 }
 
 //---------------------------------------------------------------------------------------------
 
+/* Constructor */
 Room::Room( int type,QGraphicsItem* parent)
 {
     QPointF myCoordinates = QPointF(0,0);
@@ -128,6 +131,7 @@ Room::Room( int type,QGraphicsItem* parent)
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 }
 
+/* Schimbarea preciziei dimensiunilor */
 void PlanDialog::changePrecision(int decimals)
 {
     widthSpinBox->setDecimals(decimals);
