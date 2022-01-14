@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include "Element.h"
-
+#include "Room.h"
 #include <QGraphicsScene>
 
-//fereastra in care se construieste planificarea
+
+//fereastra in care se construieste planificarea evenimentului
 class PlanScene : public QGraphicsScene
 {
     /* Macro non-standard pentru adăugarea unui comportament dinamic al claselor/obiectelor */
@@ -37,6 +38,7 @@ signals:
     /* Metode de tip signals */
     void itemInserted(Element* item);
     void itemSelected(QGraphicsItem* item);
+    void itemDeleted(Element* item);
 
 
 protected:
@@ -51,6 +53,7 @@ private:
     Mode myMode;
     Element::ShapeType myItemShape;
     Element::ElementType myItemType;
+    Room* room;
     
     QPointF startPoint;  //punctul in care plasez item-ul
     QColor myItemColor;  //item-ul poate fi colorat diferit si conturul lui de asemenea

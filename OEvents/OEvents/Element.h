@@ -6,6 +6,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
+#include <QJsonObject>
 
 /* ! \class Element
      *   \brief Clasă pentru elementele ce pot fi adaugate in plan:mese,scaune,scena,bufet
