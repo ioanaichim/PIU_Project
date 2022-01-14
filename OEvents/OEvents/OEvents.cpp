@@ -154,7 +154,7 @@ void OEvents::projectWasModified()
 
 }
 
-/* Metoda publica pentru adaugare unui plan */
+/* Metoda publica pentru adaugare unui plan in scena*/
 void OEvents::addPlan()
 { 
     //workwidget->setVisible(true);
@@ -247,9 +247,8 @@ void OEvents::itemSelected(QGraphicsItem* item)
 /* Metoda publica pentru inserare */
 void OEvents::itemInserted(Element* item)
 {
-    /*pointerTypeGroup->button(int(PlanScene::MoveItem))->setChecked(true);
-    scene->setMode(PlanScene::Mode(pointerTypeGroup->checkedId()));
-    buttonGroup->button(int(item->diagramType()))->setChecked(false);*/
+ 
+    elements.append(item);
 }
 
 /* Metoda publica pentru butonul About cu informatii despre proiect */

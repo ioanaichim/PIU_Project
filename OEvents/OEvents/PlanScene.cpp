@@ -80,7 +80,7 @@ void PlanScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
     switch (myMode) {
     case InsertItem:
         Element* item;
-        item = new Element(myItemType,myItemMenu);
+        item = new Element(myItemType,myItemMenu,room);
         //item->setBrush(myItemColor);
         //addItem(item);
         item->updateCoordinates(mouseEvent->scenePos());

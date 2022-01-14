@@ -8,6 +8,7 @@
 #include "PlanDialog.h"
 #include <QToolBox>
 
+#include <QJsonObject>
 #include <QtWidgets>
 
 using namespace std;
@@ -73,6 +74,7 @@ private:
     QWidget* workwidget;
     Room* room;
     QString projectName;
+    QList<Element*> elements;
 
     QAction* exitAction;
     QAction* addAction;
