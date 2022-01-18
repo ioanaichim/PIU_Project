@@ -32,6 +32,7 @@ public slots:
     void setMode(Mode mode);
     void setItemShape(Element::ShapeType shape);
     void setItemType(Element::ElementType type);
+    void setRoomConnection(Room* room) { myRoom = room; };
 
 signals:
     /* Metode de tip signals */
@@ -52,7 +53,7 @@ private:
     Mode myMode;
     Element::ShapeType myItemShape;
     Element::ElementType myItemType;
-    Room* room;
+    Room* myRoom;
     
     QPointF startPoint;  //punctul in care plasez item-ul
     QColor myItemColor;  //item-ul poate fi colorat diferit si conturul lui de asemenea

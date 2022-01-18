@@ -30,6 +30,7 @@ public:
     /*Proprietate publica*/
     Element* element;
 
+
 private slots:
     /* Metode publice */
     void newProject();

@@ -20,9 +20,9 @@ OEvents::OEvents()
     view = new QGraphicsView(scene);
     layout->addWidget(view);
 
-    QWidget* workwidget = new QWidget;
+    workwidget = new QWidget;
     workwidget->setLayout(layout);
-    //workwidget->setVisible(false);//indisponibil pana cand se incepe un nou proiect
+    workwidget->setEnabled(false);//indisponibil pana cand se incepe un nou proiect
 
     setCentralWidget(workwidget);
     setWindowTitle(tr("OEvents"));
@@ -157,7 +157,7 @@ void OEvents::projectWasModified()
 /* Metoda publica pentru adaugare unui plan in scena*/
 void OEvents::addPlan()
 { 
-    //workwidget->setVisible(true);
+    workwidget->setEnabled(true);
     
     QPen pen(Qt::blue, 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     scene->clear();
@@ -168,6 +168,7 @@ void OEvents::addPlan()
     scene->setSceneRect(room->boundingRect());
     scene->addItem(room);
     scene->setFocusItem(room);
+    scene->setRoomConnection(room);
 
 }
 
@@ -186,7 +187,6 @@ void OEvents::deleteItem()
 void OEvents::duplicateItem()
 {
     QList<QGraphicsItem*> selectedItems = scene->selectedItems();
-
     for (QGraphicsItem* item : qAsConst(selectedItems)) {
         scene->addItem(item);
         
